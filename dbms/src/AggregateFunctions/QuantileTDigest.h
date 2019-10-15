@@ -6,6 +6,7 @@
 #include <IO/WriteBuffer.h>
 #include <IO/ReadBuffer.h>
 #include <IO/VarInt.h>
+#include <IO/WriteHelpers.h>
 
 
 namespace DB
@@ -220,7 +221,7 @@ public:
         readVarUInt(size, buf);
 
         if (size > params.max_unmerged)
-            throw Exception("Too large t-digest summary size", ErrorCodes::TOO_LARGE_ARRAY_SIZE);
+            throw Exception("Too large t-digest summary size (" + toString(size) + " > " + toString(params.max_unmerged) + ")", ErrorCodes::TOO_LARGE_ARRAY_SIZE);
 
         summary.resize(size);
         buf.read(reinterpret_cast<char *>(summary.data()), size * sizeof(summary[0]));
